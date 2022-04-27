@@ -8,7 +8,7 @@ PresharedKey = {{ wireguard_user_preshared_key.results[ansible_loop.index0]['con
 {% if item.item.allow_ips == "" %}
 AllowedIPs = "0.0.0.0/0, ::/0"
 {% else %}
-AllowedIPs = {{ item.item.allow_ips }}
+AllowedIPs = {{ wireguard_subnet }}, {{ item.item.allow_ips }}
 {% endif %}
 Endpoint = {{ wireguard_public_ip.stdout }}:{{ wireguard_port_listen }}
 PersistentKeepalive = 25

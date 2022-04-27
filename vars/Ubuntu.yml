@@ -1,5 +1,6 @@
 ---
 wireguard_os_packages:
+  - wireguard
   - wireguard-tools
   - qrencode
   - iptables
