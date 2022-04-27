@@ -1,0 +1,22 @@
+[Interface]
+Address = {{ wireguard_address }}
+PrivateKey = {{ wireguard_private_key['content'] | b64decode | replace('\n', '')}}
+ListenPort = {{ wireguard_port_listen }}
+PostUp = /usr/sbin/iptables -A FORWARD -i {{ wireguard_interface }} -j ACCEPT
+PostUp = /usr/sbin/iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+PostUp = /usr/sbin/iptables -t nat -A POSTROUTING -s {{ wireguard_address }} -j SNAT --to {{ private_ip }}
+PostDown = /usr/sbin/iptables -D FORWARD -i {{ wireguard_interface }} -j ACCEPT
+PostDown = /usr/sbin/iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+PostDown = /usr/sbin/iptables -t nat -D POSTROUTING -s {{ wireguard_address }} -j SNAT --to {{ private_ip }}
+
+{% for item in wireguard_user_public_key.results %}
+{% if item.item.state != "absent" %}
+## BEGIN_PEER {{ item.item.username }}
+[Peer]
+PublicKey = {{ item['content'] | b64decode | replace('\n', '') }}
+PresharedKey = {{ wireguard_user_preshared_key.results[loop.index0]['content'] | b64decode | replace('\n', '')}}
+AllowedIps = {{ item.item.private_ip }}/32
+## END_PEER {{ item.item.username }}
+
+{% endif %}
+{% endfor %}

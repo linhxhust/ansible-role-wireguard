@@ -1,0 +1,6 @@
+---
+wireguard_os_packages:
+  - wireguard-tools
+  - qrencode
+  - iptables
+  - msmtp

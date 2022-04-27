@@ -1,0 +1,13 @@
+---
+- name: Start Wireguard
+  systemd:
+   name: "wg-quick@{{ wireguard_interface }}"
+   state: started
+   enabled: yes
+   daemon_reload: yes
+
+- name: Restart Wireguard
+  systemd:
+   name: "wg-quick@{{ wireguard_interface }}"
+   state: restarted
+   daemon_reload: yes

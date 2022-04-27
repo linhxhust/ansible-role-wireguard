@@ -1,0 +1,45 @@
+---
+- name: Install OS packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ wireguard_os_packages }}"
+
+- name: Update sysctl setting
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    reload: yes
+
+- name: Create wireguard conf directory
+  file:
+    path: /etc/wireguard
+    state: directory
+  register: wireguard_conf_dir
+
+- name: Generate wireguard server key
+  shell: |
+    if [ ! -f {{ wireguard_conf_dir.path }}/privatekey ]
+    then
+      umask 077 && wg genkey | tee {{ wireguard_conf_dir.path}}/privatekey | wg pubkey > {{ wireguard_conf_dir.path}}/publickey
+    fi
+    exit 0
+
+- name: Get wireguard private key
+  slurp:
+   src: "{{ wireguard_conf_dir.path }}/privatekey"
+  register: wireguard_private_key
+
+- name: Get wireguard public key
+  slurp:
+   src: "{{ wireguard_conf_dir.path }}/publickey"
+  register: wireguard_public_key
+
+- name: Get public IP
+  command: curl --silent --fail http://ifconfig.me/ip
+  register: wireguard_public_ip
+
+- name: Public IP
+  debug:
+    msg: "PublicIP: {{ wireguard_public_ip.stdout }}"

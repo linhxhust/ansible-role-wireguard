@@ -1,0 +1,47 @@
+---
+- name: Create user config directory
+  file:
+   path: "{{ wireguard_conf_dir.path }}/{{ item.username }}"
+   state: directory
+  with_items: "{{ wireguard_users }}"
+  when: item.state != "absent"
+
+- name: Remove user config directory
+  file:
+    path: "{{ wireguard_conf_dir.path }}/{{ item.username }}"
+    state: absent
+  with_items: "{{ wireguard_users }}"
+  when: item.state == "absent"
+
+- name: Generate wireguard user key
+  shell: |
+    if [ ! -f {{ wireguard_conf_dir.path }}/{{ item.username }}/privatekey ]
+      then
+        cd {{ wireguard_conf_dir.path }}/{{ item.username }}
+        wg genkey | tee privatekey | wg pubkey > publickey
+        wg genpsk | tee psk
+    fi
+    exit 0
+  with_items: "{{ wireguard_users }}"
+  when: item.state != "absent"
+
+- name: Get user private key
+  slurp:
+    src: "{{ wireguard_conf_dir.path }}/{{ item.username }}/privatekey"
+  with_items: "{{ wireguard_users }}"
+  register: wireguard_user_private_key
+  when: item.state != "absent"
+
+- name: Get user public key
+  slurp:
+    src: "{{ wireguard_conf_dir.path }}/{{ item.username }}/publickey"
+  with_items: "{{ wireguard_users }}"
+  register: wireguard_user_public_key
+  when: item.state != "absent"
+
+- name: Get user preshared key
+  slurp:
+    src: "{{ wireguard_conf_dir.path }}/{{ item.username }}/psk"
+  with_items: "{{ wireguard_users }}"
+  register: wireguard_user_preshared_key
+  when: item.state != "absent"

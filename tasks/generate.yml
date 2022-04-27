@@ -1,0 +1,20 @@
+---
+- name: Generate server config
+  template:
+    src: "wg0.j2"
+    dest: "{{ wireguard_conf_dir.path }}/{{ wireguard_interface }}.conf"
+    mode: 0640
+    backup: yes
+  loop: "{{ wireguard_user_public_key.results }}"
+  when: (item.item.state != "absent")
+  notify: Start Wireguard
+
+- name: Generate client config
+  template:
+    src: "client.j2"
+    dest: "{{ wireguard_conf_dir.path }}/{{ item.item.username }}/wg0.conf"
+  loop: "{{ wireguard_user_private_key.results }}"
+  loop_control:
+    extended: yes
+  when: (item.item.state != "absent")
+  notify: Restart Wireguard

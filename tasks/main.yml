@@ -1,0 +1,25 @@
+---
+- name: Include assert.yml
+  include: assert.yml
+
+- name: Include OS variables
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Install OS packages
+  include: install.yml
+  tags: installation
+
+- name: Include User list
+  include_vars: "user.yml"
+
+- name: Provision user
+  include: user.yml
+  tags: provision
+
+- name: Generate file config
+  include: generate.yml
+  tags: provision
+
+# - name: Send wireguard config via email
+#   include: email.yml
+#   tags: provision

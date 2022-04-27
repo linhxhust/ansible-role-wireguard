@@ -1,0 +1,12 @@
+---
+wireguard_users:
+  - username: "client_1"
+    email: "client_1@gmail.com"
+    private_ip: "10.99.0.2"
+    allow_ips: "10.69.0.0/16"
+    state: "present"
+  - username: "client_2"
+    email: "client_2@gmail.com"
+    private_ip: "10.99.0.3"
+    allow_ips: "10.69.0.0/16"
+    state: "present"
