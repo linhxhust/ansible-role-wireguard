@@ -13,7 +13,7 @@ PostDown = /usr/sbin/iptables -t nat -D POSTROUTING -s {{ wireguard_address }} -
 {% if item.item.state != "absent" %}
 ## BEGIN_PEER {{ item.item.username }}
 [Peer]
-PublicKey = {{ wireguard_public_key['content'] | b64decode | replace('\n', '') }}
+PublicKey = {{ item['content'] | b64decode | replace('\n', '')}}
 PresharedKey = {{ wireguard_user_preshared_key.results[loop.index0]['content'] | b64decode | replace('\n', '')}}
 AllowedIPs = {{ item.item.private_ip }}/32
 ## END_PEER {{ item.item.username }}

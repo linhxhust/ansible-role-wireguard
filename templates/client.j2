@@ -3,7 +3,7 @@ Address = {{ item.item.private_ip }}/24
 PrivateKey = {{ item['content'] | b64decode | replace('\n', '')}}
 
 [Peer]
-PublicKey = {{ wireguard_user_public_key.results[ansible_loop.index0]['content'] | b64decode | replace('\n', '')}}
+PublicKey = {{ wireguard_public_key['content'] | b64decode | replace('\n', '') }}
 PresharedKey = {{ wireguard_user_preshared_key.results[ansible_loop.index0]['content'] | b64decode | replace('\n', '')}}
 {% if item.item.allow_ips == "" %}
 AllowedIPs = "0.0.0.0/0, ::/0"
