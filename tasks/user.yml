@@ -1,8 +1,8 @@
 ---
 - name: Create user config directory
   file:
-   path: "{{ wireguard_conf_dir.path }}/{{ item.username }}"
-   state: directory
+    path: "{{ wireguard_conf_dir.path }}/{{ item.username }}"
+    state: directory
   with_items: "{{ wireguard_users }}"
   when: item.state != "absent"
 

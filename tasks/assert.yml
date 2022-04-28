@@ -1,10 +1,10 @@
 ---
-- name : Check distribution
+- name: Check distribution
   assert:
-   quiet: yes
-   fail_msg: "{{ ansible_distribution }} is not supported for this role"
-   that:
-    - ansible_distribution in os_supported_matrix
+    quiet: yes
+    fail_msg: "{{ ansible_distribution }} is not supported for this role"
+    that:
+      - ansible_distribution in os_supported_matrix
 
 # - debug:
 #     msg: "{{ item.key}} - {{ item.value }}"
@@ -12,7 +12,7 @@
 
 - name: Get os version to compare
   set_fact:
-   os_version_to_compare: "{{ item.value.min_version }}"
+    os_version_to_compare: "{{ item.value.min_version }}"
   loop: "{{ lookup('dict', os_supported_matrix) }}"
   no_log: True
   when:

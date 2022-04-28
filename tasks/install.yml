@@ -8,7 +8,7 @@
 - name: Update sysctl setting
   sysctl:
     name: net.ipv4.ip_forward
-    value: '1'
+    value: "1"
     state: present
     reload: yes
 
@@ -22,18 +22,19 @@
   shell: |
     if [ ! -f {{ wireguard_conf_dir.path }}/privatekey ]
     then
-      umask 077 && wg genkey | tee {{ wireguard_conf_dir.path}}/privatekey | wg pubkey > {{ wireguard_conf_dir.path}}/publickey
+      umask 077 && wg genkey | tee {{ wireguard_conf_dir.path}}/privatekey
+      wg pubkey < privatekey | tee {{ wireguard_conf_dir.path}}/publickey
     fi
     exit 0
 
 - name: Get wireguard private key
   slurp:
-   src: "{{ wireguard_conf_dir.path }}/privatekey"
+    src: "{{ wireguard_conf_dir.path }}/privatekey"
   register: wireguard_private_key
 
 - name: Get wireguard public key
   slurp:
-   src: "{{ wireguard_conf_dir.path }}/publickey"
+    src: "{{ wireguard_conf_dir.path }}/publickey"
   register: wireguard_public_key
 
 - name: Get public IP
