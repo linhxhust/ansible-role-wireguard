@@ -1,21 +1,22 @@
 ---
 - name: Include assert.yml
-  include: assert.yml
+  include_tasks: assert.yml
 
 - name: Include OS variables
   include_vars: "{{ ansible_distribution }}.yml"
 
 - name: Install OS packages
-  include: install.yml
+  include_tasks: install.yml
   tags: installation
 
 - name: Provision user
-  include: user.yml
+  include_tasks: user.yml
   tags: provision
 
 - name: Generate file config
-  include: generate.yml
+  include_tasks: generate.yml
   tags: provision
+
 # - name: Send wireguard config via email
 #   include: email.yml
 #   tags: provision
