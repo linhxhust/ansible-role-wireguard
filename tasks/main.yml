@@ -20,4 +20,3 @@
 # - name: Send wireguard config via email
 #   include: email.yml
 #   tags: provision
-
