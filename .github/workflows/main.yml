@@ -1,0 +1,24 @@
+name: Syntax-check
+
+on:
+  push:
+
+jobs:
+  ansible:
+    name: build container
+    runs-on: ubuntu-latest
+    env:
+      ANSIBLE_ROLES_PATH: ".."
+
+    steps:
+      - name: Install ansible
+        run: sudo apt install -y ansible
+
+      - name: Check version
+        run: ansible --version
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run syntax check
+        run: ansible-playbook -i tests/inventory tests/test.yml --syntax-check

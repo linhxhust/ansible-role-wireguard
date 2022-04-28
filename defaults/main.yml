@@ -11,5 +11,9 @@ wireguard_address: "10.99.0.1/24"
 wireguard_subnet: "10.99.0.0/24"
 wireguard_port_listen: "51820"
 
-wireguard_users: [{}]
-
+wireguard_users:
+  - username: "client_1"
+    email: "client_1@example.com"
+    private_ip: "10.99.0.2"
+    allow_ips: "10.69.0.0/16"
+    state: "present"
