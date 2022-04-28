@@ -7,8 +7,8 @@ os_supported_matrix:
 private_ip: "{{ ansible_default_ipv4.address }}"
 
 wireguard_interface: "wg0"
-wireguard_address: "10.99.0.1/24"
 wireguard_subnet: "10.99.0.0/24"
+wireguard_server_address: "10.99.0.1/24"
 wireguard_port_listen: "51820"
 
 wireguard_users:
