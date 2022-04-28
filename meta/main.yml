@@ -3,6 +3,7 @@ galaxy_info:
   description: Wireguard role
   license: BSD
   min_ansible_version: 2.8.4
+  role_name: wireguard
 
   platforms:
     - name: Fedora
@@ -20,3 +21,4 @@ galaxy_info:
     - security
 
 dependencies: []
+
