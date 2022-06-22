@@ -72,6 +72,23 @@ wireguard_users:
     allow_ips: "10.69.0.0/16"
     state: "present"
 ```
+### `mail_from`
+
+- Set the mail address that you send from.
+- Example: notifications@github.com, info@shopee.vn, ...etc
+
+### `mail_title`
+
+- Title for mails, usually name of company.
+
+### `smtp_user`
+
+- Key of your AWS SES
+
+### `smtp_pass`
+
+- Secret of your AWS SES
+
 
 ## License
 

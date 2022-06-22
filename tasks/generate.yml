@@ -12,9 +12,19 @@
 - name: Generate client config
   template:
     src: "client.j2"
-    dest: "{{ wireguard_conf_dir.path }}/{{ item.item.username }}/wg0.conf"
+    dest: "{{ wireguard_conf_dir.path }}/{{ item.item.username }}/client.conf"
   loop: "{{ wireguard_user_private_key.results }}"
   loop_control:
     extended: yes
   when: (item.item.state != "absent")
   notify: Restart Wireguard
+
+- name: Generate QR code
+  shell: |
+    qrencode -t png -o clientconf.png < "{{ wireguard_conf_dir.path }}/{{ item.username }}/client.conf"
+    mv clientconf.png {{ wireguard_conf_dir.path }}/{{ item.username }}
+  vars:
+    chdir: "/etc/wireguard/{{ item.username }}"
+  changed_when: false
+  with_items: "{{ wireguard_users }}" 
+  when: item.state != "absent"

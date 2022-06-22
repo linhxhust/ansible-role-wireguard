@@ -5,6 +5,48 @@
     state: present
   with_items: "{{ wireguard_os_packages }}"
 
+- name: Install Postfix
+  package: name=postfix state=present
+
+- name: Ensure Postfix is enabled and started
+  service: name=postfix enabled=yes state=started
+
+- name: Install QRencode
+  package: name=qrencode state=present
+
+- name: Create send mail scripts
+  file: 
+    path: "/tmp/sendmail.sh"
+    state: touch
+    mode: 0777
+
+- name: Insert content for send mail scripts
+  ansible.builtin.lineinfile:
+    path: /tmp/sendmail.sh
+    line: |
+      ( echo "to: $mailto"
+        echo "from: {{ mail_title }} <{{ mail_from }}>"
+        echo "subject: Wireguard config"
+        echo "mime-version: 1.0"
+        echo "content-type: multipart/related; boundary=xxxRANDOMSTRINGxxx"
+        echo
+        echo "--xxxRANDOMSTRINGxxx"
+        echo "content-type: text/plain"
+        echo
+        echo "Here is config wireguard for you"
+        echo
+        echo "--xxxRANDOMSTRINGxxx"
+        echo "content-type: text/gif; name=client.conf"
+        echo "content-transfer-encoding: base64"
+        echo
+        openssl base64 < /etc/wireguard/$username/client.conf
+        echo "--xxxRANDOMSTRINGxxx"
+        echo "content-type: image/gif; name=clientconf.png"
+        echo "content-transfer-encoding: base64"
+        echo
+        openssl base64 < /etc/wireguard/$username/clientconf.png ) | sendmail -f {{ mail_from }} $mailto
+        
+
 - name: Update sysctl setting
   sysctl:
     name: net.ipv4.ip_forward
