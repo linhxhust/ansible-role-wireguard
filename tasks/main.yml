@@ -9,13 +9,17 @@
   include_tasks: install.yml
   tags: installation
 
+- name: Prepare posfix
+  include_tasks: postfix.yml
+
 - name: Provision user
   include_tasks: user.yml
   tags: provision
 
 - name: Generate file config
   include_tasks: generate.yml
+  tags: provision  
+
+- name: Send wireguard config via email
+  include: email.yml
   tags: provision
-# - name: Send wireguard config via email
-#   include: email.yml
-#   tags: provision

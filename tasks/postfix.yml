@@ -1,0 +1,30 @@
+---
+- name: Config postfix
+  shell: postconf -e "relayhost = [email-smtp.us-west-2.amazonaws.com]:587" \  
+         "smtp_sasl_auth_enable = yes" \
+         "smtp_sasl_security_options = noanonymous" \
+         "smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd" \
+         "smtp_use_tls = yes" \
+         "smtp_tls_security_level = encrypt" \
+         "smtp_tls_note_starttls_offer = yes"
+
+- name: Create send sasl_passwd
+  file: 
+    path: "/etc/postfix/sasl_passwd"
+    state: touch
+    mode: 0664
+
+- name: Insert config sasl_passwd
+  ansible.builtin.lineinfile:
+    path: /etc/postfix/sasl_passwd
+    line: |
+      [email-smtp.us-west-2.amazonaws.com]:587 {{ SMTPUsername }}:{{ SMTPPassword }}
+
+- name: Create a hashmap database file with SMTP credentials
+  command: postmap hash:/etc/postfix/sasl_passwd
+
+- name: Tell postfix where to find CA certificate
+  shell: postconf -e 'smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt'
+
+- name: Reload Postfix
+  command: postfix reload
