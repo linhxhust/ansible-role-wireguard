@@ -81,11 +81,11 @@ wireguard_users:
 
 - Title for mails, usually name of company.
 
-### `SMTP_user`
+### `smtp_user`
 
 - Key of your AWS SES
 
-### `SMTP_pass`
+### `smtp_pass`
 
 - Secret of your AWS SES
 

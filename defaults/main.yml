@@ -20,5 +20,5 @@ wireguard_users:
 
 mail_from: "noreply@example"
 mail_title: "whateveryouwant"
-SMTP_user: "example"
-SMTP_pass: "example"
+smtp_user: "example"
+smtp_pass: "example"

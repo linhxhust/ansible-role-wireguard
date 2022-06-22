@@ -18,7 +18,7 @@
   ansible.builtin.lineinfile:
     path: /etc/postfix/sasl_passwd
     line: |
-      [email-smtp.us-west-2.amazonaws.com]:587 {{ SMTP_user }}:{{ SMTP_pass }}
+      [email-smtp.us-west-2.amazonaws.com]:587 {{ smtp_user }}:{{ smtp_pass }}
 
 - name: Create a hashmap database file with SMTP credentials
   command: postmap hash:/etc/postfix/sasl_passwd
