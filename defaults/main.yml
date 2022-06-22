@@ -18,5 +18,7 @@ wireguard_users:
     allow_ips: "10.69.0.0/16"
     state: "present"
 
-mail_from: noreply@example
-mail_title: whateveryouwant
+mail_from: "noreply@example"
+mail_title: "whateveryouwant"
+SMTP_user: "example"
+SMTP_pass: "example"
