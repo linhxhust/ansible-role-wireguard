@@ -1,6 +1,11 @@
 ---
 - name: Send wireguard user config via email if needed
-  shell: mailto={{ item.email }} username={{ item.username }} bash /tmp/sendmail.sh
+  shell: |
+    if [ ! -f {{ wireguard_conf_dir.path }}/{{ item.username }}/already_sent_email ]
+      then
+        mailto={{ item.email }} username={{ item.username }} bash /tmp/sendmail.sh && echo "Already sent config via email" >> {{ wireguard_conf_dir.path }}/{{ item.username }}/already_sent_email
+      fi
+      exit 0
   with_items: "{{ wireguard_users }}"
   when: item.state != "absent"
 
