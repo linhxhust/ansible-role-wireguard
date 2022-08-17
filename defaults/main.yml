@@ -3,6 +3,8 @@ os_supported_matrix:
     min_version: "16.04"
   Fedora:
     min_version: "32"
+  Debian:
+    min_version: "9"
 
 private_ip: "{{ ansible_default_ipv4.address }}"
 
