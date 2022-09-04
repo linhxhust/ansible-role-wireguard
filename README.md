@@ -11,6 +11,7 @@ This role does work with the following minimum versions:
 * Ansible: 2.8.4
 * Wireguard: v1.0.20210914
 * Ubuntu: 16.04
+* Debian: 9
 * Fedora: 32
 
 ## Example
