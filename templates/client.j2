@@ -1,5 +1,6 @@
 [Interface]
 Address = {{ item.item.private_ip }}/24
+DNS = {{ wireguard_dns }}
 PrivateKey = {{ item['content'] | b64decode | replace('\n', '')}}
 
 [Peer]
